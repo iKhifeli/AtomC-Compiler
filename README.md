@@ -1,6 +1,13 @@
 # AtomC-Compiler
 
-> This is a simple versatile Atom C compiler that knows to compile simple instructions and can detect various types of errors like sintax errors, data type related errors, and many more. 
+By *Gelu Popa*, guided by *Răzvan Aciu*
+>https://sites.google.com/site/razvanaciu/
+
+***ASK BEFORE USE!!***
+
+**This is a simple versatile Atom C compiler that knows to compile simple instructions and can detect various types of errors like sintax errors, data type related errors, and many more.**
+
+>Written in C.
 
 **Recognizing all atoms**
 
