@@ -326,8 +326,7 @@ int exprMul(RetVal* rv); int exprMulPrim(RetVal* rv); int exprCast(RetVal* rv); 
 int exprPostFixPrim(RetVal* rv); int exprPrimary(RetVal* rv);
 
 int consume(int code) {
-	const char* code_name = codeName(code);
-	printf("consume(%s)", code_name);
+	const char* code_name = codeName(code);	printf("consume(%s)", code_name);
 	if (crtTk->code == code) {
 		consumedTk = crtTk;
 		crtTk = crtTk->next;
@@ -609,7 +608,7 @@ int stm() {
 	printf("@stm (%s)\n", codeName(crtTk->code));
 	Token* start = crtTk;
 	RetVal rv;
-	Instr* i,*i1,*i2 = NULL,*i3,*i4 = NULL,*is,*ib3,*ibs;
+	Instr* i,*i1,*i2,*i3,*i4,*is,*ib3,*ibs;
 	if (stmCompound()) {
 		return 1;
 	}
@@ -624,9 +623,10 @@ int stm() {
 						if (stm()) {
 							if (consume(ELSE)) {
 								i2 = addInstr(O_JMP);
-								stm();
-								i1->args[0].addr = i2->next;
-								i1 = i2;
+								if (stm()) {
+									i1->args[0].addr = i2->next;
+									i1 = i2;
+								}
 							}
 							i1->args[0].addr = addInstr(O_NOP);
 							return 1;
@@ -676,7 +676,11 @@ int stm() {
 								addInstrI(O_DROP, typeArgSize(&rv1.type));
 						}
 						if (consume(SEMICOLON)) {
-							expr(&rv2);
+							i2 = lastInstruction; /* i2 is before rv2 */
+							if (expr(&rv2)) {
+								i4 = createCondJmp(&rv2);
+							}
+							else i4 = NULL;
 							if (rv2.type.typeBase == TB_STRUCT)
 								tkerr(crtTk, "a structure cannot be logically tested");
 							if (consume(SEMICOLON)) {
@@ -700,7 +704,7 @@ int stm() {
 										}
 										addInstrA(O_JMP, i2->next);
 										appendInstr(crtLoopEnd);
-										if (i4)i4->args[0].addr = crtLoopEnd;
+										if (i4!=NULL)i4->args[0].addr = crtLoopEnd;
 										crtLoopEnd = oldLoopEnd;
 
 										return 1;
