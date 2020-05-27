@@ -348,7 +348,13 @@ int unit() {
 		else if (declFunc()) {}
 		else if (declVar()) {}
 		else {
-			labelMain->args[0].addr = findSymbol(&symbols, "main")->addr;
+			Symbol* m = findSymbol(&symbols, "main");
+			if (m != NULL) {
+				labelMain->args[0].addr = m->addr;
+			}
+			else {
+				tkerr(crtTk, " Functia main lipseste!\n");
+			}
 			break;
 		}
 	}
@@ -528,6 +534,16 @@ int declFunc() {
 				while (consume(COMMA) && funcArg()) {}
 				if (consume(RPAR)) {
 					crtDepth--;
+					crtFunc->addr = addInstr(O_ENTER);
+					sizeArgs = offset;
+					//update args offsets for correct FP indexing
+					for (ps = symbols.begin; ps != symbols.end; ps++) {
+						if ((*ps)->mem == MEM_ARG) {
+							//2*sizeof(void*) == sizeof(retAddr)+sizeof(FP)
+							(*ps)->offset -= sizeArgs + 2 * sizeof(void*);
+						}
+					}
+					offset = 0;
 					if (stmCompound()) {
 						deleteSymbolsAfter(&symbols, crtFunc);
 						((Instr*)crtFunc->addr)->args[0].i = offset;  // setup the ENTER argument 
