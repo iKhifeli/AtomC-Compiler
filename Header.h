@@ -1,5 +1,10 @@
 #pragma once
 
+/************************************************************
+HEADER FOR ATOM C COMPILER
+by GELU POPA
+************************************************************/
+
 #define SAFEALLOC(var,Type) if((var=(Type*)malloc(sizeof(Type)))==NULL)err("not enough memory");
 
 typedef struct Token {

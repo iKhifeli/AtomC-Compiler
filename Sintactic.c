@@ -3,6 +3,7 @@
 ANALIZOR SINTACTIC + ANALIZOR DE TIPURI + ANALIZOR DE DOMENII
 by GELU POPA
 ************************************************************/
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
