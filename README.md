@@ -1,6 +1,6 @@
 # AtomC-Compiler
 
-By *Gelu Popa*, guided by *Răzvan Aciu*
+By *Gelu Popa*, guided by *Dr. Răzvan Aciu*
 >https://sites.google.com/site/razvanaciu/
 
 ***ASK BEFORE USE!!***
